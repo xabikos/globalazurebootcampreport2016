@@ -11,9 +11,11 @@ namespace GlobalAzureBootcampReport.Controllers
 	public class HomeController : Controller
 	{
 		private ITwitterManager _twitterManager;
+		private ITweetsRepository _repo;
 
-		public HomeController(ITwitterManager twitterManager) {
+		public HomeController(ITwitterManager twitterManager, ITweetsRepository repo) {
 			_twitterManager = twitterManager;
+			_repo = repo;
 		}
 
 		public IActionResult Index()
@@ -24,7 +26,6 @@ namespace GlobalAzureBootcampReport.Controllers
 		public IActionResult About()
 		{
 			ViewData["Message"] = "Your application description page.";
-
 			return View();
 		}
 

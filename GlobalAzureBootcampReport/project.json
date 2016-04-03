@@ -1,4 +1,4 @@
-﻿{
+{
   "userSecretsId": "aspnet5-GlobalAzureBootcampReport-7c1b01e0-748d-45c0-96a9-4da30850b65c",
   "version": "1.0.0-*",
   "compilationOptions": {
@@ -25,7 +25,8 @@
     "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
-    "TweetinviAPI": "0.9.11.1"
+    "TweetinviAPI": "0.9.11.1",
+    "WindowsAzure.Storage": "6.2.0"
   },
 
   "commands": {
