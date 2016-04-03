@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GlobalAzureBootcampReport.Extensions;
+using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Tweetinvi;
@@ -25,7 +26,7 @@ namespace GlobalAzureBootcampReport.Data.Impl {
 				_stream.MatchingTweetReceived += async (sender, args) => {
 					Console.WriteLine("A tweet containing 'tweetinvi' has been found; the tweet is '" + args.Tweet + "'");
 					Debug.WriteLine(args.Tweet.Text);
-					await _tweetsRepository.SaveTweet(args.Tweet);
+					await _tweetsRepository.SaveTweet(args.Tweet.ToCustomTweet());
 				};
 				_stream.StreamStopped += (sender, args) => Task.Factory.StartNew(_stream.StartStreamMatchingAllConditionsAsync);
 

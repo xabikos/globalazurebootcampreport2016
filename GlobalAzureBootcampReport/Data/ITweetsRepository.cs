@@ -1,10 +1,12 @@
-﻿using System.Threading.Tasks;
-using Tweetinvi.Core.Interfaces;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace GlobalAzureBootcampReport.Data {
 	public interface ITweetsRepository {
-		Task SaveTweet(ITweet tweet);
+		Task<IEnumerable<Tweet>> GetLatestTweets(int minutesToRetrieve);
 
-		Task DeleteAllTables();
+		Task SaveTweet(Tweet tweet);
+
+		void DeleteAllTables();
 	}
 }

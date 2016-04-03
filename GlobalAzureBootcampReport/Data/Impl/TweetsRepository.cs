@@ -9,10 +9,13 @@ using System.Net.Http;
 using System.IO;
 using System.Diagnostics;
 using GlobalAzureBootcampReport.Helpers;
+using System;
+using System.Collections.Generic;
 
 namespace GlobalAzureBootcampReport.Data.Impl {
 	internal class TweetsRepository : ITweetsRepository {
 		private const string ImagesContainerName = "profileimages";
+		private const string TweetsTableName = "tweets";
 
 		private readonly IDocumentDbManager _documentDbManager;
 		private readonly CloudStorageAccount _account;
@@ -22,18 +25,23 @@ namespace GlobalAzureBootcampReport.Data.Impl {
 			_account = CloudStorageAccount.Parse(configuration["StorageConnectionString"]);
 		}
 
-		public async Task SaveTweet(ITweet tweet) {
+		public Task<IEnumerable<Tweet>> GetLatestTweets(int minutesToRetrieve) {
+			throw new NotImplementedException();
+		}
+
+		public async Task SaveTweet(Tweet tweet) {
 			// Save the tweet to Document db for the generic timeline
 			var saveToTimeline = _documentDbManager.SaveTweet(tweet);
 
-			// Save the tweet to table storage for user
-			var tweetEntity = new TweetEntity(tweet.CreatedBy.IdStr, tweet.IdStr) {
+
+			//Save the tweet to table storage for user
+			var tweetEntity = new TweetEntity(tweet.CreatedBy.IdStr, tweet.Id) {
 				User = tweet.CreatedBy.Name,
 				ScreenName = tweet.CreatedBy.ScreenName,
 				Text = tweet.Text,
 				Country = tweet.Place?.Country
 			};
-			var userTable = await GetTableReference(tweet.CreatedBy.IdStr);
+			var userTable = await GetTableReference(TweetsTableName);
 			var insertOperation = TableOperation.Insert(tweetEntity);
 			var saveToUserTweets = userTable.ExecuteAsync(insertOperation);
 
@@ -41,15 +49,15 @@ namespace GlobalAzureBootcampReport.Data.Impl {
 			await Task.WhenAll(saveToTimeline, saveToUserTweets, saveUserImage);
 		}
 
-		public async Task DeleteAllTables() {
+		public void DeleteAllTables() {
 			var tableClient = _account.CreateCloudTableClient();
 			var tables = tableClient.ListTables().ToList();
-			foreach (var table in tables)
-				table.DeleteIfExists();
-			await Task.FromResult(0);
+			Parallel.ForEach(tables, (table) => table.DeleteIfExists());
+			//foreach (var table in tables)
+			//	table.DeleteIfExists();
 		}
 
-		private async Task CheckForNewUserAndStoreImage(ITweet tweet) {
+		private async Task CheckForNewUserAndStoreImage(Tweet tweet) {
 			var user = tweet.CreatedBy;
 
 			var container = await GetContainerReference(ImagesContainerName);
@@ -59,7 +67,6 @@ namespace GlobalAzureBootcampReport.Data.Impl {
 			if(!profileImageExists) {
 				using (var client = new HttpClient()) {
 					var profileImage = await client.GetByteArrayAsync(user.ProfileImageUrl);
-					Debug.WriteLine($"image extension: {user.ProfileBackgroundImageUrl.Split('.').Last()}");
 
 					var blob = container.GetBlockBlobReference(user.IdStr);
 					blob.Properties.ContentType = ContentTypeHelper.GetContentType(user.ProfileImageUrl);
