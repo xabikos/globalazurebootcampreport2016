@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
+using Tweetinvi;
 
 namespace GlobalAzureBootcampReport.Controllers
 {
@@ -23,8 +24,10 @@ namespace GlobalAzureBootcampReport.Controllers
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
+			var tweets = Timeline.GetHomeTimeline();
+			ViewBag.Tweet = tweets.First().Text;
 
-            return View();
+			return View();
         }
 
         public IActionResult Error()

@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using GlobalAzureBootcampReport.Models;
 using GlobalAzureBootcampReport.Services;
+using Tweetinvi;
 
 namespace GlobalAzureBootcampReport
 {
@@ -21,7 +22,8 @@ namespace GlobalAzureBootcampReport
             // Set up configuration sources.
             var builder = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+				.AddJsonFile("connectionSecrets.json", optional: true)
+				.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
             if (env.IsDevelopment())
             {
@@ -94,7 +96,14 @@ namespace GlobalAzureBootcampReport
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-        }
+
+			Auth.SetUserCredentials(
+				Configuration["TwitterConsumerKey"],
+				Configuration["TwitterConsumerSecret"],
+				Configuration["TwitterUserAccessToken"],
+				Configuration["TwitterUserAccessSecret"]
+			);
+		}
 
         // Entry point for the application.
         public static void Main(string[] args) => WebApplication.Run<Startup>(args);
