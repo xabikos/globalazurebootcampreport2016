@@ -12,6 +12,8 @@ using Microsoft.Extensions.Logging;
 using GlobalAzureBootcampReport.Models;
 using GlobalAzureBootcampReport.Services;
 using Tweetinvi;
+using GlobalAzureBootcampReport.Data;
+using GlobalAzureBootcampReport.Data.Impl;
 
 namespace GlobalAzureBootcampReport
 {
@@ -52,10 +54,16 @@ namespace GlobalAzureBootcampReport
 
             services.AddMvc();
 
-            // Add application services.
-            services.AddTransient<IEmailSender, AuthMessageSender>();
+			services.AddSingleton<IConfiguration>(sp => { return Configuration; });
+
+			// Add application services.
+			services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
-        }
+
+			services.AddSingleton<ITwitterManager, TwitterManager>();
+			services.AddTransient<ITweetsRepository, TweetsRepository>();
+			services.AddTransient<IDocumentDbManager, DocumentDbManager>();
+		}
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
@@ -103,6 +111,7 @@ namespace GlobalAzureBootcampReport
 				Configuration["TwitterUserAccessToken"],
 				Configuration["TwitterUserAccessSecret"]
 			);
+			app.ApplicationServices.GetRequiredService<ITwitterManager>().Connect();
 		}
 
         // Entry point for the application.
