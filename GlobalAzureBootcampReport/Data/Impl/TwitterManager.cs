@@ -20,7 +20,7 @@ namespace GlobalAzureBootcampReport.Data.Impl {
 			if (_stream == null || _stream.StreamState == Tweetinvi.Core.Enum.StreamState.Stop) {
 
 				_stream = Stream.CreateFilteredStream();
-				_stream.AddTrack("halsey");
+				_stream.AddTrack("Leicester");
 
 				_stream.MatchingTweetReceived += async (sender, args) => {
 					Console.WriteLine("A tweet containing 'tweetinvi' has been found; the tweet is '" + args.Tweet + "'");
