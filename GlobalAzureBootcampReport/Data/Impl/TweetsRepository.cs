@@ -15,7 +15,7 @@ using System.Collections.Generic;
 namespace GlobalAzureBootcampReport.Data.Impl {
 	internal class TweetsRepository : ITweetsRepository {
 		private const string ImagesContainerName = "profileimages";
-		private const string TweetsTableName = "tweets";
+		private const string TimelineTableName = "timeline";
 
 		private readonly IDocumentDbManager _documentDbManager;
 		private readonly CloudStorageAccount _account;
@@ -25,13 +25,27 @@ namespace GlobalAzureBootcampReport.Data.Impl {
 			_account = CloudStorageAccount.Parse(configuration["StorageConnectionString"]);
 		}
 
-		public Task<IEnumerable<Tweet>> GetLatestTweets(int minutesToRetrieve) {
-			throw new NotImplementedException();
+		public async Task<IEnumerable<Tweet>> GetLatestTweets(int minutesToRetrieve = 60) {
+			var table = await GetTableReference(TimelineTableName);
+			var oneHourAgoTimestap = new DateTimeOffset(DateTime.UtcNow.AddMinutes(-minutesToRetrieve));
+			var query =
+				new TableQuery<TweetEntity>().Where(TableQuery.GenerateFilterConditionForDate("Timestamp",
+					QueryComparisons.GreaterThan, oneHourAgoTimestap));
+			return table.ExecuteQuery(query).Select(t => new Tweet {
+				Id = t.RowKey,
+				CreatedBy = new User { IdStr = t.PartitionKey, Name = t.User, ScreenName = t.ScreenName},
+				CreatedAt = DateTime.Parse(t.CreatedAt),
+				Text = t.Text
+			});
+		}
+
+		public IEnumerable<Tweet> GetUserTweets(string userID) {
+			return _documentDbManager.GetUserTweets(userID);
 		}
 
 		public async Task SaveTweet(Tweet tweet) {
 			// Save the tweet to Document db for the generic timeline
-			var saveToTimeline = _documentDbManager.SaveTweet(tweet);
+			var saveUserTweet = _documentDbManager.SaveUserTweet(tweet);
 
 
 			//Save the tweet to table storage for user
@@ -39,14 +53,14 @@ namespace GlobalAzureBootcampReport.Data.Impl {
 				User = tweet.CreatedBy.Name,
 				ScreenName = tweet.CreatedBy.ScreenName,
 				Text = tweet.Text,
-				Country = tweet.Place?.Country
+				Country = tweet.Place?.Country,
 			};
-			var userTable = await GetTableReference(TweetsTableName);
+			var timelineTable = await GetTableReference(TimelineTableName);
 			var insertOperation = TableOperation.Insert(tweetEntity);
-			var saveToUserTweets = userTable.ExecuteAsync(insertOperation);
+			var saveToTimeline = timelineTable.ExecuteAsync(insertOperation);
 
 			var saveUserImage = CheckForNewUserAndStoreImage(tweet);
-			await Task.WhenAll(saveToTimeline, saveToUserTweets, saveUserImage);
+			await Task.WhenAll(saveUserTweet, saveUserImage);
 		}
 
 		public void DeleteAllTables() {
@@ -76,7 +90,7 @@ namespace GlobalAzureBootcampReport.Data.Impl {
 		}
 
 		private async Task<CloudTable> GetTableReference(string tableName) {
-			var tableReference = _account.CreateCloudTableClient().GetTableReference($"user{tableName}");
+			var tableReference = _account.CreateCloudTableClient().GetTableReference(tableName);
 			await tableReference.CreateIfNotExistsAsync();
 			return tableReference;
 		}

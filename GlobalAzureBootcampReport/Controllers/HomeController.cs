@@ -23,9 +23,12 @@ namespace GlobalAzureBootcampReport.Controllers
 			return View();
 		}
 
-		public IActionResult About()
+		public async Task<IActionResult> About()
 		{
 			ViewData["Message"] = "Your application description page.";
+			var latestTweetsCount = (await _repo.GetLatestTweets()).Count();
+			var userTweets =_repo.GetUserTweets("1422966553").ToList();
+			ViewBag.Count = latestTweetsCount;
 			return View();
 		}
 

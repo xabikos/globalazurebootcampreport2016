@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace GlobalAzureBootcampReport.Data.Impl {
 	internal class DocumentDbManager : IDocumentDbManager {
 		private const string databaseName = "tweets";
-		private const string collectionName = "timeline";
+		private const string collectionName = "userstweets";
 
 		private DocumentClient _client;
 
@@ -18,11 +18,14 @@ namespace GlobalAzureBootcampReport.Data.Impl {
 			_client = new DocumentClient(new Uri(documentDBEndpointUrl), documnetDBAuthoriazationKey);
 		}
 
-		public Task<IEnumerable<Tweet>> GetLatestTweets(int minutesToRetrieve) {
-			throw new NotImplementedException();
+		public IEnumerable<Tweet> GetUserTweets(string userID) {
+			return _client.CreateDocumentQuery<Tweet>(
+				UriFactory.CreateDocumentCollectionUri(databaseName, collectionName))
+				.Where(t => t.CreatedBy.IdStr == userID);
+
 		}
 
-		public async Task SaveTweet(Tweet tweet) {
+		public async Task SaveUserTweet(Tweet tweet) {
 			var userId = tweet.CreatedBy.IdStr;
 			var user = tweet.CreatedBy;
 
