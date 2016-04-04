@@ -11,17 +11,20 @@ using System.Diagnostics;
 using GlobalAzureBootcampReport.Helpers;
 using System;
 using System.Collections.Generic;
+using GlobalAzureBootcampReport.Azure;
 
 namespace GlobalAzureBootcampReport.Data.Impl {
 	internal class TweetsRepository : ITweetsRepository {
-		private const string ImagesContainerName = "profileimages";
+
 		private const string TimelineTableName = "timeline";
 
 		private readonly IDocumentDbManager _documentDbManager;
+		private readonly AzureHelper _azureHelper;
 		private readonly CloudStorageAccount _account;
 
-		public TweetsRepository(IConfiguration configuration, IDocumentDbManager documentDbManager) {
+		public TweetsRepository(IConfiguration configuration, IDocumentDbManager documentDbManager, AzureHelper azureHelper) {
 			_documentDbManager = documentDbManager;
+			_azureHelper = azureHelper;
 			_account = CloudStorageAccount.Parse(configuration["StorageConnectionString"]);
 		}
 
@@ -74,7 +77,7 @@ namespace GlobalAzureBootcampReport.Data.Impl {
 		private async Task CheckForNewUserAndStoreImage(Tweet tweet) {
 			var user = tweet.CreatedBy;
 
-			var container = await GetContainerReference(ImagesContainerName);
+			var container = await GetContainerReference(AzureHelper.ImagesContainerName);
 			var profileImageExists = await container.GetBlockBlobReference(user.IdStr).ExistsAsync();
 
 			// Check if a new user

@@ -25,6 +25,7 @@
     "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
+    "StackExchange.Redis": "1.0.488",
     "TweetinviAPI": "0.9.11.1",
     "WindowsAzure.Storage": "6.2.0"
   },

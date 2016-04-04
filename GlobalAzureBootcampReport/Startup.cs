@@ -14,72 +14,74 @@ using GlobalAzureBootcampReport.Services;
 using Tweetinvi;
 using GlobalAzureBootcampReport.Data;
 using GlobalAzureBootcampReport.Data.Impl;
+using GlobalAzureBootcampReport.Azure;
 
 namespace GlobalAzureBootcampReport
 {
-    public class Startup
-    {
-        public Startup(IHostingEnvironment env)
-        {
-            // Set up configuration sources.
-            var builder = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
+	public class Startup
+	{
+		public Startup(IHostingEnvironment env)
+		{
+			// Set up configuration sources.
+			var builder = new ConfigurationBuilder()
+				.AddJsonFile("appsettings.json")
 				.AddJsonFile("connectionSecrets.json", optional: true)
 				.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
-            if (env.IsDevelopment())
-            {
-                // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                builder.AddUserSecrets();
-            }
+			if (env.IsDevelopment())
+			{
+				// For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
+				builder.AddUserSecrets();
+			}
 
-            builder.AddEnvironmentVariables();
-            Configuration = builder.Build();
-        }
+			builder.AddEnvironmentVariables();
+			Configuration = builder.Build();
+		}
 
-        public IConfigurationRoot Configuration { get; set; }
+		public IConfigurationRoot Configuration { get; set; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
-            // Add framework services.
-            services.AddEntityFramework()
-                .AddSqlServer()
-                .AddDbContext<ApplicationDbContext>(options =>
-                    options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
+		// This method gets called by the runtime. Use this method to add services to the container.
+		public void ConfigureServices(IServiceCollection services)
+		{
+			// Add framework services.
+			services.AddEntityFramework()
+				.AddSqlServer()
+				.AddDbContext<ApplicationDbContext>(options =>
+					options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+			services.AddIdentity<ApplicationUser, IdentityRole>()
+				.AddEntityFrameworkStores<ApplicationDbContext>()
+				.AddDefaultTokenProviders();
 
-            services.AddMvc();
+			services.AddMvc();
 
 			services.AddSingleton<IConfiguration>(sp => { return Configuration; });
 
 			// Add application services.
 			services.AddTransient<IEmailSender, AuthMessageSender>();
-            services.AddTransient<ISmsSender, AuthMessageSender>();
-
+			services.AddTransient<ISmsSender, AuthMessageSender>();
+			services.AddSingleton<AzureHelper>();
 			services.AddSingleton<ITwitterManager, TwitterManager>();
+			services.AddTransient<ICache, Cache>();
 			services.AddTransient<ITweetsRepository, TweetsRepository>();
 			services.AddTransient<IDocumentDbManager, DocumentDbManager>();
 		}
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
-        {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
+		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+		{
+			loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+			loggerFactory.AddDebug();
 
-            //if (env.IsDevelopment())
-            //{
-                app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
-            //}
-            //else
-            //{
-            //    app.UseExceptionHandler("/Home/Error");
-            //}
+			//if (env.IsDevelopment())
+			//{
+				app.UseDeveloperExceptionPage();
+				app.UseDatabaseErrorPage();
+			//}
+			//else
+			//{
+			//    app.UseExceptionHandler("/Home/Error");
+			//}
 			// For more details on creating database during deployment see http://go.microsoft.com/fwlink/?LinkID=615859
 			try {
 				using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
@@ -92,18 +94,18 @@ namespace GlobalAzureBootcampReport
 
 			app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());
 
-            app.UseStaticFiles();
+			app.UseStaticFiles();
 
-            app.UseIdentity();
+			app.UseIdentity();
 
-            // To configure external authentication please see http://go.microsoft.com/fwlink/?LinkID=532715
+			// To configure external authentication please see http://go.microsoft.com/fwlink/?LinkID=532715
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+			app.UseMvc(routes =>
+			{
+				routes.MapRoute(
+					name: "default",
+					template: "{controller=Home}/{action=Index}/{id?}");
+			});
 
 			Auth.SetUserCredentials(
 				Configuration["TwitterConsumerKey"],
@@ -111,10 +113,10 @@ namespace GlobalAzureBootcampReport
 				Configuration["TwitterUserAccessToken"],
 				Configuration["TwitterUserAccessSecret"]
 			);
-			app.ApplicationServices.GetRequiredService<ITwitterManager>().Connect();
+			//app.ApplicationServices.GetRequiredService<ITwitterManager>().Connect();
 		}
 
-        // Entry point for the application.
-        public static void Main(string[] args) => WebApplication.Run<Startup>(args);
-    }
+		// Entry point for the application.
+		public static void Main(string[] args) => WebApplication.Run<Startup>(args);
+	}
 }
