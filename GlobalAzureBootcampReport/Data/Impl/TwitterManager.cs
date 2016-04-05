@@ -32,14 +32,18 @@ namespace GlobalAzureBootcampReport.Data.Impl {
 			if (_stream == null || _stream.StreamState == Tweetinvi.Core.Enum.StreamState.Stop) {
 
 				_stream = Stream.CreateFilteredStream();
-				_stream.AddTrack("#mondaymotivation");
-
+				_stream.AddTrack("#ReasonsHumansWillGoExtinct");
+				var flag = true;
 				_stream.MatchingTweetReceived += async (sender, args) => {
 					Console.WriteLine("A tweet containing 'tweetinvi' has been found; the tweet is '" + args.Tweet + "'");
 					Debug.WriteLine(args.Tweet.Text);
-					var customTweet = args.Tweet.ToCustomTweet();
-					await _tweetsRepository.SaveTweet(customTweet);
-					UpdateTweetsAndClients(customTweet);
+					if (flag) {
+						//flag = false;
+						var customTweet = args.Tweet.ToCustomTweet();
+						await _tweetsRepository.SaveTweet(customTweet);
+						await UpdateStatisticsAndClients(customTweet);
+						UpdateTweetsAndClients(customTweet);
+					}
 				};
 				_stream.StreamStopped += (sender, args) => Task.Factory.StartNew(_stream.StartStreamMatchingAllConditionsAsync);
 
@@ -55,6 +59,9 @@ namespace GlobalAzureBootcampReport.Data.Impl {
 
 		private async Task UpdateStatisticsAndClients(Tweet tweet) {
 			var allUsersStatistics = await _cache.GetItemAsync<IList<UserStat>>(_cache.AllUsersStatsKey);
+			if (allUsersStatistics == null) {
+				allUsersStatistics = new List<UserStat>();
+			}
 
 			var userStats = allUsersStatistics.FirstOrDefault(us => us.UserId == tweet.CreatedBy.IdStr);
 			// First tweet of the user
@@ -72,16 +79,20 @@ namespace GlobalAzureBootcampReport.Data.Impl {
 			else {
 				userStats.TweetsNumber++;
 			}
-			_cache.SetItemAsync(_cache.AllUsersStatsKey,
-				allUsersStatistics.Select(us => new { us.UserId, us.TweetsNumber })).Wait();
+			await _cache.SetItemAsync(_cache.AllUsersStatsKey,
+				allUsersStatistics.Select(us => new { us.UserId, us.TweetsNumber }));
 
-			var topUsersStatistics = _cache.GetItemAsync<IList<UserStat>>(_cache.TopUsersStatsKey).Result;
+			var topUsersStatistics = await _cache.GetItemAsync<IList<UserStat>>(_cache.TopUsersStatsKey);
+			if(topUsersStatistics == null) {
+				topUsersStatistics = new List<UserStat>();
+			}
 
 			var newTopUsersStatistics = allUsersStatistics.OrderByDescending(us => us.TweetsNumber).Take(15).ToList();
 
 			if (topUsersStatistics.Count < 15 ||
 				topUsersStatistics.Intersect(newTopUsersStatistics, new UserStatComparer()).Any()) {
 				_topUsersCounter++;
+
 				foreach (var userStat in newTopUsersStatistics) {
 					var fullUserStat = topUsersStatistics.FirstOrDefault(us => us.UserId == userStat.UserId);
 					if (fullUserStat != null) {
@@ -97,10 +108,10 @@ namespace GlobalAzureBootcampReport.Data.Impl {
 						userStat.ImageUrl = _azureHelper.GetUserProfileImagesContainerReference() + tweet.CreatedBy.IdStr;
 					}
 				}
-				_cache.SetItemAsync(_cache.TopUsersStatsKey, newTopUsersStatistics).Wait();
+				await _cache.SetItemAsync(_cache.TopUsersStatsKey, newTopUsersStatistics);
 			}
 
-			if (_topUsersCounter == BatchSize) {
+			if (_topUsersCounter >= BatchSize) {
 				_topUsersCounter = 0;
 				// TODO Push tweets to clients
 				//_context.Value.Clients.All.updateUsersStats(newTopUsersStatistics);
