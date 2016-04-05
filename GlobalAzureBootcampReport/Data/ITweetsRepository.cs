@@ -8,7 +8,5 @@ namespace GlobalAzureBootcampReport.Data {
 		IEnumerable<Tweet> GetUserTweets(string userID);
 
 		Task SaveTweet(Tweet tweet);
-
-		void DeleteAllTables();
 	}
 }
