@@ -27,6 +27,7 @@
     "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
     "StackExchange.Redis": "1.0.488",
     "TweetinviAPI": "0.9.11.1",
+    "Webpack": "1.2.4",
     "WindowsAzure.Storage": "6.2.0"
   },
 
@@ -48,6 +49,6 @@
     "**.vspscc"
   ],
   "scripts": {
-    "prepublish": [ "npm install", "bower install", "gulp clean", "gulp min" ]
+    "prepublish": [ ]
   }
 }

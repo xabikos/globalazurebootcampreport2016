@@ -15,6 +15,7 @@ using Tweetinvi;
 using GlobalAzureBootcampReport.Data;
 using GlobalAzureBootcampReport.Data.Impl;
 using GlobalAzureBootcampReport.Azure;
+using Webpack;
 
 namespace GlobalAzureBootcampReport
 {
@@ -55,6 +56,8 @@ namespace GlobalAzureBootcampReport
 
 			services.AddMvc();
 
+			services.AddWebpack();
+
 			services.AddSingleton<IConfiguration>(sp => { return Configuration; });
 
 			// Add application services.
@@ -73,11 +76,14 @@ namespace GlobalAzureBootcampReport
 			loggerFactory.AddConsole(Configuration.GetSection("Logging"));
 			loggerFactory.AddDebug();
 
-			//if (env.IsDevelopment())
-			//{
+			if (env.IsDevelopment()) {
 				app.UseDeveloperExceptionPage();
 				app.UseDatabaseErrorPage();
-			//}
+				app.UseWebpack(new WebpackOptions() {
+					HandleJsxFiles = true,
+					EnableHotLoading = true
+				});
+			}
 			//else
 			//{
 			//    app.UseExceptionHandler("/Home/Error");

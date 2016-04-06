@@ -1,6 +1,5 @@
 ﻿using GlobalAzureBootcampReport.Azure;
 using GlobalAzureBootcampReport.Extensions;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -35,7 +34,6 @@ namespace GlobalAzureBootcampReport.Data.Impl {
 				_stream.AddTrack("#ReasonsHumansWillGoExtinct");
 				var flag = true;
 				_stream.MatchingTweetReceived += async (sender, args) => {
-					Console.WriteLine("A tweet containing 'tweetinvi' has been found; the tweet is '" + args.Tweet + "'");
 					Debug.WriteLine(args.Tweet.Text);
 					if (flag) {
 						//flag = false;

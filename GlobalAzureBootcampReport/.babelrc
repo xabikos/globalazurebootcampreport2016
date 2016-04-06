@@ -1,0 +1,9 @@
+﻿{
+  "plugins": ["transform-runtime"],
+  "env": {
+    // only enable it when process.env.NODE_ENV is 'development' or undefined
+    "development": {
+      "presets": ["react-hmre"]
+    }
+  }
+}
