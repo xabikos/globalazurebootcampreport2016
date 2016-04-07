@@ -59,6 +59,7 @@ namespace GlobalAzureBootcampReport
 			services.AddMvc().AddJsonOptions(options =>
 				options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver()
 			);
+			services.AddSignalR();
 
 			services.AddWebpack();
 

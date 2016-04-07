@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using Tweetinvi;
 using GlobalAzureBootcampReport.Data;
+using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Infrastructure;
 
 namespace GlobalAzureBootcampReport.Controllers
 {
@@ -13,9 +15,12 @@ namespace GlobalAzureBootcampReport.Controllers
 		private ITwitterManager _twitterManager;
 		private ITweetsRepository _repo;
 
-		public HomeController(ITwitterManager twitterManager, ITweetsRepository repo) {
+		private IHubContext _hubContext;
+
+		public HomeController(ITwitterManager twitterManager, ITweetsRepository repo, IConnectionManager connectionManager) {
 			_twitterManager = twitterManager;
 			_repo = repo;
+			_hubContext = connectionManager.GetHubContext<BootcampReportHub>();
 		}
 
 		public IActionResult Index()
@@ -27,8 +32,9 @@ namespace GlobalAzureBootcampReport.Controllers
 		{
 			ViewData["Message"] = "Your application description page.";
 			var latestTweetsCount = (await _repo.GetLatestTweets()).Count();
-			var userTweets =_repo.GetUserTweets("1422966553").ToList();
+			//var userTweets =_repo.GetUserTweets("1422966553").ToList();
 			ViewBag.Count = latestTweetsCount;
+			_hubContext.Clients.All.updateUsersStats("Message from server");
 			return View();
 		}
 
