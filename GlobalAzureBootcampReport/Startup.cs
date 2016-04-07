@@ -16,6 +16,7 @@ using GlobalAzureBootcampReport.Data;
 using GlobalAzureBootcampReport.Data.Impl;
 using GlobalAzureBootcampReport.Azure;
 using Webpack;
+using Newtonsoft.Json.Serialization;
 
 namespace GlobalAzureBootcampReport
 {
@@ -54,7 +55,9 @@ namespace GlobalAzureBootcampReport
 				.AddEntityFrameworkStores<ApplicationDbContext>()
 				.AddDefaultTokenProviders();
 
-			services.AddMvc();
+			services.AddMvc().AddJsonOptions(options =>
+				options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver()
+			);
 
 			services.AddWebpack();
 
@@ -81,7 +84,10 @@ namespace GlobalAzureBootcampReport
 				app.UseDatabaseErrorPage();
 				app.UseWebpack(new WebpackOptions() {
 					HandleJsxFiles = true,
-					EnableHotLoading = true
+					EnableHotLoading = true,
+					StylesTypes = new List<StylesType> { StylesType.Css},
+					HandleStaticFiles = true,
+					StaticFileTypes = new List<StaticFileType> { StaticFileType.Png}
 				});
 			}
 			//else

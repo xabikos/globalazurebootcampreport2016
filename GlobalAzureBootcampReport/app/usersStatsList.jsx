@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import {Panel} from 'react-bootstrap';
 
+import ApiService from './apiService.js';
 
 class UsersStatsList extends Component {
   constructor(props) {
@@ -11,18 +12,22 @@ class UsersStatsList extends Component {
     };
   }
 
+  componentDidMount() {
+    ApiService.get('api/statistics')
+              .then(data => this.setState({stats: data}))
+  }
 
   render() {
     const stats = this.state.stats.map(userStat =>
-			<li>
+			<li key={userStat.userId}>
 				<div className="userImage">
-					<a href={userStat.ProfileUrl} target="_blank">
-						<img src={userStat.ImageUrl} />
+					<a href={userStat.profileUrl} target="_blank">
+						<img src={userStat.imageUrl} />
 					</a>
 				</div>
 				<div className="userInfo">
-					<div className="userName"><a href={userStat.ProfileUrl} target="_blank">@{userStat.Name}</a></div>
-					<div className="userCounter">{userStat.TweetsNumber} tweets</div>
+					<div className="userName"><a href={userStat.profileUrl} target="_blank">@{userStat.name}</a></div>
+					<div className="userCounter">{userStat.tweetsNumber} tweets</div>
 				</div>
 			</li>
 		);
