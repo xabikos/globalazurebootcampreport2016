@@ -13,7 +13,7 @@ class UsersStatsList extends Component {
   }
 
   componentDidMount() {
-    ApiService.get('api/statistics')
+    ApiService.get('api/data/usersStats')
               .then(data => this.setState({stats: data}))
   }
 
@@ -41,9 +41,5 @@ class UsersStatsList extends Component {
 		);
   }
 }
-
-UsersStatsList.propTypes = {
-
-};
 
 export default UsersStatsList;

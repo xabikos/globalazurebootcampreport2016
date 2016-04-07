@@ -5,6 +5,7 @@ import './style.css';
 
 import NavigationBar from './navigationBar.jsx';
 import UsersStatsList from './usersStatsList.jsx';
+import TweetsList from './tweetsList.jsx';
 
 const App = () => (
 <div>
@@ -15,7 +16,7 @@ const App = () => (
         <UsersStatsList />
       </Col>
       <Col xs={12} md={6}>
-        tweets list
+        <TweetsList />
       </Col>
       <Col xs={12} md={3}>
         security
