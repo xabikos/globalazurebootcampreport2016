@@ -3,6 +3,7 @@
 /// <reference path="../app/boootcampmanager.js" />
 /// <reference path="../app/index.js" />
 /// <reference path="../webpack/webpack.dev.js" />
+/// <reference path="bundle.js" />
 /// <reference path="js/jquery.signalr.min.js" />
 /// <reference path="js/site.js" />
 /// <reference path="lib/bootstrap/dist/js/bootstrap.js" />

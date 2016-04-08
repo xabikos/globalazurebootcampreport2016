@@ -76,13 +76,13 @@ namespace GlobalAzureBootcampReport {
 			if (env.IsDevelopment()) {
 				app.UseDeveloperExceptionPage();
 				app.UseDatabaseErrorPage();
-				app.UseWebpack(new WebpackOptions() {
-					HandleJsxFiles = true,
-					EnableHotLoading = true,
-					StylesTypes = new List<StylesType> { StylesType.Css},
-					HandleStaticFiles = true,
-					StaticFileTypes = new List<StaticFileType> { StaticFileType.Png}
-				});
+				//app.UseWebpack(new WebpackOptions() {
+				//	HandleJsxFiles = true,
+				//	EnableHotLoading = true,
+				//	StylesTypes = new List<StylesType> { StylesType.Css},
+				//	HandleStaticFiles = true,
+				//	StaticFileTypes = new List<StaticFileType> { StaticFileType.Png}
+				//});
 			}
 			//else
 			//{
