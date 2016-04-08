@@ -8,6 +8,7 @@ namespace GlobalAzureBootcampReport.Data
 	public interface ITwitterManager
 	{
 		Task Connect();
-		void Disconnect();
+		void Pause();
+		void Resume();
 	}
 }

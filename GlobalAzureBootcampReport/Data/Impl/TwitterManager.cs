@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Tweetinvi;
 using Tweetinvi.Core.Interfaces.Streaminvi;
+using System;
 
 namespace GlobalAzureBootcampReport.Data.Impl {
 	internal class TwitterManager : ITwitterManager {
@@ -32,7 +33,7 @@ namespace GlobalAzureBootcampReport.Data.Impl {
 		public async Task Connect() {
 
 			// create the stream only once
-			if (_stream == null || _stream.StreamState == Tweetinvi.Core.Enum.StreamState.Stop) {
+			if (_stream == null || _stream.StreamState == Tweetinvi.Core.Enum.StreamState.Stop || _stream.StreamState == Tweetinvi.Core.Enum.StreamState.Pause) {
 
 				_stream = Stream.CreateFilteredStream();
 				_stream.AddTrack("#FridayFeeling");
@@ -49,13 +50,19 @@ namespace GlobalAzureBootcampReport.Data.Impl {
 				};
 				_stream.StreamStopped += (sender, args) => Task.Factory.StartNew(_stream.StartStreamMatchingAllConditionsAsync);
 
-				await Task.Factory.StartNew(_stream.StartStreamMatchingAnyConditionAsync);
+				await Task.Factory.StartNew(_stream.StartStreamMatchingAllConditionsAsync);
 			}
 		}
 
-		public void Disconnect() {
+		public void Pause() {
 			if (_stream != null) {
-				_stream.StopStream();
+				_stream.PauseStream();
+			}
+		}
+
+		public void Resume() {
+			if (_stream != null) {
+				_stream.ResumeStream();
 			}
 		}
 

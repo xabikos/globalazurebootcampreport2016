@@ -20,13 +20,21 @@ namespace GlobalAzureBootcampReport.Controllers {
 		public async Task<IEnumerable<UserStat>> GetUserStats()
 		{
 			var stats = await _cache.GetItemAsync<IEnumerable<UserStat>>(_cache.TopUsersStatsKey);
-			stats = stats.OrderByDescending(us => us.TweetsNumber).Take(20);
-			return stats;
+			if (stats != null) {
+				stats = stats.OrderByDescending(us => us.TweetsNumber).Take(20);
+				return stats;
+			}
+			return Enumerable.Empty<UserStat>();
 		}
 
 		[HttpGet("LatestTweets")]
 		public Task<IEnumerable<Tweet>> GetLatestTweets() {
 			return _tweetsRepository.GetLatestTweets(30);
+		}
+
+		[HttpGet("GetUserTweets")]
+		public IEnumerable<Tweet> GetUserTweets(string userId) {
+			return _tweetsRepository.GetUserTweets(userId);
 		}
 
 	}

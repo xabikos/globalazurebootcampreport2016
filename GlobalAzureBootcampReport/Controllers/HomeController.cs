@@ -68,7 +68,7 @@ namespace GlobalAzureBootcampReport.Controllers
 
 		public ContentResult Disconnect() {
 			try {
-				_twitterManager.Disconnect();
+				_twitterManager.Pause();
 				return new ContentResult {
 					Content = "Successfully disconnect"
 				};
@@ -76,6 +76,20 @@ namespace GlobalAzureBootcampReport.Controllers
 			catch (Exception ex) {
 				return new ContentResult {
 					Content = $"Error during disconnect with message: {ex.Message}"
+				};
+			}
+		}
+
+		public ContentResult Reconnect() {
+			try {
+				_twitterManager.Resume();
+				return new ContentResult {
+					Content = "Successfully resumed"
+				};
+			}
+			catch (Exception ex) {
+				return new ContentResult {
+					Content = $"Error during resumed with message: {ex.Message}"
 				};
 			}
 		}
