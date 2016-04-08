@@ -1,16 +1,19 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace GlobalAzureBootcampReport.Data
-{
+namespace GlobalAzureBootcampReport.Data {
 	public class UserStat {
+		[JsonProperty("userId")]
 		public string UserId { get; set; }
+		[JsonProperty("name")]
 		public string Name { get; set; }
+		[JsonProperty("profileUrl")]
 		public string ProfileUrl { get; set; }
+		[JsonProperty("tweetsNumber")]
 		public int TweetsNumber { get; set; }
+		[JsonProperty("country")]
 		public string Country { get; set; }
+		[JsonProperty("imageUrl")]
 		public string ImageUrl { get; set; }
 	}
 

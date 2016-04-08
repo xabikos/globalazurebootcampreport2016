@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {Panel} from 'react-bootstrap';
 
 import ApiService from './apiService.js';
+import BootcampManager from './bootcampManager.js';
 
 class UsersStatsList extends Component {
   constructor(props) {
@@ -10,15 +11,21 @@ class UsersStatsList extends Component {
     this.state = {
       stats: []
     };
+    this.onUpdateUsersStats = this.onUpdateUsersStats.bind(this);
   }
 
   componentDidMount() {
     ApiService.get('api/data/usersStats')
               .then(data => this.setState({stats: data}))
+    BootcampManager.addUsersStatsChangeListener(this.onUpdateUsersStats);
+  }
+
+  onUpdateUsersStats(newStats){
+    this.setState({stats: newStats});
   }
 
   render() {
-    const stats = this.state.stats.map(userStat =>
+    const stats = this.state.stats.map((userStat, i) =>
 			<li key={userStat.userId}>
 				<div className="userImage">
 					<a href={userStat.profileUrl} target="_blank">

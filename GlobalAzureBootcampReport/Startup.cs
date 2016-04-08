@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNet.SignalR;
 using Microsoft.Data.Entity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,10 +13,8 @@ using GlobalAzureBootcampReport.Data;
 using GlobalAzureBootcampReport.Data.Impl;
 using GlobalAzureBootcampReport.Azure;
 using Webpack;
-using Newtonsoft.Json.Serialization;
 
-namespace GlobalAzureBootcampReport
-{
+namespace GlobalAzureBootcampReport {
 	public class Startup
 	{
 		public Startup(IHostingEnvironment env)
@@ -56,9 +50,7 @@ namespace GlobalAzureBootcampReport
 				.AddEntityFrameworkStores<ApplicationDbContext>()
 				.AddDefaultTokenProviders();
 
-			services.AddMvc().AddJsonOptions(options =>
-				options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver()
-			);
+			services.AddMvc();
 			services.AddSignalR();
 
 			services.AddWebpack();

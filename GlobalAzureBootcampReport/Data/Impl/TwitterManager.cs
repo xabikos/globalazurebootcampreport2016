@@ -1,5 +1,7 @@
 ﻿using GlobalAzureBootcampReport.Azure;
 using GlobalAzureBootcampReport.Extensions;
+using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Infrastructure;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -17,11 +19,13 @@ namespace GlobalAzureBootcampReport.Data.Impl {
 		private IFilteredStream _stream;
 		private readonly ITweetsRepository _tweetsRepository;
 		private readonly ICache _cache;
+		private IHubContext _hubContext;
 		private readonly AzureHelper _azureHelper;
 
-		public TwitterManager(ITweetsRepository tweetsRepository, ICache cache, AzureHelper azureHelper) {
+		public TwitterManager(ITweetsRepository tweetsRepository, ICache cache, IConnectionManager connectionManager, AzureHelper azureHelper) {
 			_tweetsRepository = tweetsRepository;
 			_cache = cache;
+			_hubContext = connectionManager.GetHubContext<BootcampReportHub>();
 			_azureHelper = azureHelper;
 		}
 
@@ -31,7 +35,7 @@ namespace GlobalAzureBootcampReport.Data.Impl {
 			if (_stream == null || _stream.StreamState == Tweetinvi.Core.Enum.StreamState.Stop) {
 
 				_stream = Stream.CreateFilteredStream();
-				_stream.AddTrack("#ReasonsHumansWillGoExtinct");
+				_stream.AddTrack("#FridayFeeling");
 				var flag = true;
 				_stream.MatchingTweetReceived += async (sender, args) => {
 					Debug.WriteLine(args.Tweet.Text);
@@ -111,8 +115,7 @@ namespace GlobalAzureBootcampReport.Data.Impl {
 
 			if (_topUsersCounter >= BatchSize) {
 				_topUsersCounter = 0;
-				// TODO Push tweets to clients
-				//_context.Value.Clients.All.updateUsersStats(newTopUsersStatistics);
+				_hubContext.Clients.All.updateUsersStats(newTopUsersStatistics);
 			}
 		}
 

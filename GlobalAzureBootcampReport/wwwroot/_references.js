@@ -1,5 +1,6 @@
 ﻿/// <autosync enabled="true" />
 /// <reference path="../app/apiService.js" />
+/// <reference path="../app/boootcampmanager.js" />
 /// <reference path="../app/index.js" />
 /// <reference path="../webpack/webpack.dev.js" />
 /// <reference path="js/jquery.signalr.min.js" />
