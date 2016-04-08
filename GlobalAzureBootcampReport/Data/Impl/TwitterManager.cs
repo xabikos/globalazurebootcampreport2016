@@ -122,8 +122,7 @@ namespace GlobalAzureBootcampReport.Data.Impl {
 		private void UpdateTweetsAndClients(Tweet tweet) {
 			_tweetsCache.Add(tweet);
 			if (_tweetsCache.Count == BatchSize) {
-				// TODO Push tweets to clients
-				//_context.Value.Clients.All.addTweetsToList(_tweetsCache);
+				_hubContext.Clients.All.addTweetsToTimeLine(_tweetsCache);
 				_tweetsCache.Clear();
 			}
 		}

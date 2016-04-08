@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {Panel} from 'react-bootstrap';
 
 import ApiService from './apiService.js';
+import BootcampManager from './bootcampManager.js';
 
 class TweetsList extends Component {
   constructor(props) {
@@ -10,11 +11,17 @@ class TweetsList extends Component {
     this.state = {
       tweets: []
     };
+    this.onUpdateTimeline = this.onUpdateTimeline.bind(this);
   }
 
   componentDidMount() {
     ApiService.get('api/data/latestTweets')
               .then(data => this.setState({tweets: data}))
+    BootcampManager.addTimelineChangeListener(this.onUpdateTimeline);
+  }
+
+  onUpdateTimeline(newTweets) {
+    this.setState({tweets: [...newTweets, ...this.state.tweets]});
   }
 
   render() {

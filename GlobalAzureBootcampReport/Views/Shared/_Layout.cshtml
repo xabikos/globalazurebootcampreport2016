@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>@ViewData["Title"] - GlobalAzureBootcampReport</title>
+        <title>GlobalAzureBootcampReport</title>
 
         <environment names="Development">
             <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -43,21 +43,22 @@
         <script src="signalr/hubs"></script>
 
         @RenderSection("scripts", required: false)
-      <script>
+        <script>
           $(function () {
               // Reference the auto-generated proxy for the hub.
               var chat = $.connection.bootcampReportHub;
               // Create a function that the hub can call back to update stats.
               chat.client.updateUsersStats = function (usersStats) {
-                  console.log('update users stats: ' + usersStats);
+                  //console.log('update users stats: ' + JSON.stringify(usersStats));
                   bootcampManager.updateUsersStats(usersStats);
               };
-              chat.client.addTweetsToList = function (newTweets) {
-                  //Tweets.updateTweetsList(newTweets);
+              chat.client.addTweetsToTimeLine = function (newTweets) {
+                  //console.log('add tweets to timeline: ' + JSON.stringify(newTweets));
+                  bootcampManager.updateTimeline(newTweets);
               };
               $.connection.hub.start().done(function () {
               });
           });
-              </script>
+      </script>
     </body>
 </html>
