@@ -8,6 +8,15 @@ a.navbar-brand img {
     max-height: 55px;
 }
 
+
+.navbar {
+    background-color: #01a0ee
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: white
+}
+
 .tweetBody {
     font-size: 18px;
     color: #404040;
@@ -46,6 +55,10 @@ a.navbar-brand img {
     margin-bottom: 30px;
 }
 
+.userCounter button {
+  padding: 0;
+}
+
 .userImage {
     position: relative;
     float: left;
@@ -73,10 +86,13 @@ a.navbar-brand img {
     font-size: 14px;
 }
 
-.navbar {
-    background-color: #01a0ee
+.userTweets ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-.navbar-default .navbar-nav > li > a {
-    color: white
+.userTweets hr {
+  margin-top: 0;
 }
+

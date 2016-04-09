@@ -21,7 +21,8 @@ namespace GlobalAzureBootcampReport.Data.Impl {
 		public IEnumerable<Tweet> GetUserTweets(string userID) {
 			return _client.CreateDocumentQuery<Tweet>(
 				UriFactory.CreateDocumentCollectionUri(databaseName, collectionName))
-				.Where(t => t.CreatedBy.IdStr == userID);
+				.Where(t => t.CreatedBy.IdStr == userID)
+				.OrderByDescending(t => t.CreatedAt);
 
 		}
 

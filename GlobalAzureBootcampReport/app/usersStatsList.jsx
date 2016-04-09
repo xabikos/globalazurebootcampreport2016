@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import {Panel} from 'react-bootstrap';
+import {Panel, Button} from 'react-bootstrap';
 
 import ApiService from './apiService.js';
 import BootcampManager from './bootcampManager.js';
@@ -25,7 +25,7 @@ class UsersStatsList extends Component {
   }
 
   render() {
-    const stats = this.state.stats.map((userStat, i) =>
+    const stats = this.state.stats.map(userStat =>
 			<li key={userStat.userId}>
 				<div className="userImage">
 					<a href={userStat.profileUrl} target="_blank">
@@ -34,7 +34,9 @@ class UsersStatsList extends Component {
 				</div>
 				<div className="userInfo">
 					<div className="userName"><a href={userStat.profileUrl} target="_blank">@{userStat.name}</a></div>
-					<div className="userCounter">{userStat.tweetsNumber} tweets</div>
+					<div className="userCounter">
+            {userStat.tweetsNumber} tweets <Button onClick={() => this.props.onViewUsersTweets(userStat.userId)} bsStyle="link">View all</Button>
+          </div>
 				</div>
 			</li>
 		);
@@ -48,5 +50,9 @@ class UsersStatsList extends Component {
 		);
   }
 }
+
+UsersStatsList.propTyeps = {
+  onViewUsersTweets: PropTypes.func.isRequired,
+};
 
 export default UsersStatsList;
