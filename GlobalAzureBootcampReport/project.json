@@ -50,6 +50,6 @@
     "**.vspscc"
   ],
   "scripts": {
-    "prebuild": ["npm run dist" ]
+    "prebuild": []
   }
 }
