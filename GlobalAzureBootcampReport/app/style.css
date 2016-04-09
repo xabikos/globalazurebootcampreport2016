@@ -86,6 +86,11 @@ a.navbar-brand img {
     font-size: 14px;
 }
 
+.panel-body {
+  max-height: 82vh;
+  overflow: auto;
+}
+
 .userTweets ul {
   list-style: none;
   margin: 0;

@@ -17,7 +17,7 @@
     </head>
     <body>
         @RenderBody()
-        <hr />
+        <hr style="margin-top:0"/>
         <footer>
           <p>&copy; 2016 - GlobalAzureBootcampReport</p>
         </footer>
@@ -25,6 +25,7 @@
         <environment names="Development">
             <script src="~/lib/jquery/dist/jquery.js"></script>
             <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+            <script src="http://localhost:4000/bundle.js"></script>
         </environment>
         <environment names="Staging,Production">
             <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js"

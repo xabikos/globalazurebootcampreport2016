@@ -21,7 +21,7 @@ namespace GlobalAzureBootcampReport.Controllers {
 		{
 			var stats = await _cache.GetItemAsync<IEnumerable<UserStat>>(_cache.TopUsersStatsKey);
 			if (stats != null) {
-				stats = stats.OrderByDescending(us => us.TweetsNumber).Take(20);
+				stats = stats.OrderByDescending(us => us.TweetsNumber).Take(15);
 				return stats;
 			}
 			return Enumerable.Empty<UserStat>();
