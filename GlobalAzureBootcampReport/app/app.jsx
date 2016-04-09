@@ -26,19 +26,19 @@ class App extends Component {
     return (
       <div>
         <NavigationBar />
-          <Grid fluid={false} >
-            <Row>
-              <Col xs={12} md={3}>
-                <UsersStatsList onViewUsersTweets={this.handleViewUserTweets}/>
-              </Col>
-              <Col xs={12} md={6}>
-                <TweetsList />
-              </Col>
-              <Col xs={12} md={3}>
-                {<UserTweetsList userId={this.state.selectedUserId} />}
-              </Col>
-            </Row>
-          </Grid>
+        <Grid fluid={false} >
+          <Row>
+            <Col xs={12} md={3}>
+              <UsersStatsList onViewUsersTweets={this.handleViewUserTweets}/>
+            </Col>
+            <Col xs={12} md={6}>
+              <TweetsList />
+            </Col>
+            <Col xs={12} md={3}>
+              {<UserTweetsList userId={this.state.selectedUserId} />}
+            </Col>
+          </Row>
+        </Grid>
       </div>
     );
   }

@@ -1,9 +1,10 @@
 ﻿{
-  "plugins": ["transform-runtime"],
+  "presets": [ "es2015", "react" ],
+  "plugins": [ "transform-runtime" ],
   "env": {
     // only enable it when process.env.NODE_ENV is 'development' or undefined
     "development": {
-      "presets": ["react-hmre"]
+      "presets": [ "react-hmre" ]
     }
   }
 }
