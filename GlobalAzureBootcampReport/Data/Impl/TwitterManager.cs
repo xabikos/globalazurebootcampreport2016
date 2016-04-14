@@ -36,7 +36,7 @@ namespace GlobalAzureBootcampReport.Data.Impl {
 			if (_stream == null || _stream.StreamState == Tweetinvi.Core.Enum.StreamState.Stop || _stream.StreamState == Tweetinvi.Core.Enum.StreamState.Pause) {
 
 				_stream = Stream.CreateFilteredStream();
-				_stream.AddTrack("#N1CanalFiesta15");
+				_stream.AddTrack("#LFCBVB");
 				var flag = true;
 				_stream.MatchingTweetReceived += async (sender, args) => {
 					Debug.WriteLine(args.Tweet.Text);

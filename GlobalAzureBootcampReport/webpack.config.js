@@ -32,7 +32,7 @@ module.exports = {
   },
   devtool: 'source-map',
   devServer: {
-    host: "0.0.0.0",
+    host: "localhost",
     port: "4000",
     colors: true,
     historyApiFallback: true,

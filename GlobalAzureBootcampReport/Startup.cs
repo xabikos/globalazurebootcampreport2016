@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNet.Builder;
+﻿using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Data.Entity;
@@ -76,13 +75,7 @@ namespace GlobalAzureBootcampReport {
 			if (env.IsDevelopment()) {
 				app.UseDeveloperExceptionPage();
 				app.UseDatabaseErrorPage();
-				//app.UseWebpack(new WebpackOptions() {
-				//	HandleJsxFiles = true,
-				//	EnableHotLoading = true,
-				//	StylesTypes = new List<StylesType> { StylesType.Css},
-				//	HandleStaticFiles = true,
-				//	StaticFileTypes = new List<StaticFileType> { StaticFileType.Png}
-				//});
+				app.UseWebpack("webpack.config.js", "bundle.js", new WebpackDevServerOptions {Host= "localhost", Port = 4000 });
 			}
 			//else
 			//{
