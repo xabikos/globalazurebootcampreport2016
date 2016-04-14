@@ -20,10 +20,10 @@ namespace GlobalAzureBootcampReport.Data.Impl {
 
 		public async Task<IEnumerable<Tweet>> GetLatestTweets(int minutesToRetrieve = 60) {
 			var table = await _azureHelper.GetTableReference(AzureHelper.TimelineTableName);
-			var oneHourAgoTimestap = new DateTimeOffset(DateTime.UtcNow.AddMinutes(-minutesToRetrieve));
+			var durationToRetrieve = new DateTimeOffset(DateTime.UtcNow.AddMinutes(-minutesToRetrieve));
 			var query =
 				new TableQuery<TweetEntity>().Where(TableQuery.GenerateFilterConditionForDate("Timestamp",
-					QueryComparisons.GreaterThan, oneHourAgoTimestap));
+					QueryComparisons.GreaterThan, durationToRetrieve)).Take(100);
 			return table.ExecuteQuery(query).Select(t => new Tweet {
 				Id = t.RowKey,
 				CreatedBy = new User { IdStr = t.PartitionKey, Name = t.User, ScreenName = t.ScreenName},
