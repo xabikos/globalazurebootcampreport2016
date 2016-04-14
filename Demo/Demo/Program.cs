@@ -8,7 +8,9 @@ namespace Demo {
 	class Program {
 		static void Main(string[] args) {
 
-			BlobManager.Execute();
+			//BlobManager.Execute();
+
+			TableManager.Execute();
 
 			Console.ReadLine();
 		}

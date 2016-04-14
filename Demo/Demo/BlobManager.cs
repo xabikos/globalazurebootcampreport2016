@@ -1,23 +1,16 @@
 ﻿using Microsoft.WindowsAzure.Storage.Blob;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Demo {
 	public class BlobManager {
 
+		/// <summary>
+		/// Uploads the same image twice to the blob storage
+		/// </summary>
 		public static void Execute() {
-			UploadImage();
-		}
-
-		private static void UploadImage() {
 			var container = GetContainerReference("images");
 
-
-			var imageByteArray = File.ReadAllBytes(Path.Combine("resources","belgium.jpg"));
+			var imageByteArray = File.ReadAllBytes(Path.Combine("resources", "belgium.jpg"));
 			var imageBlob = container.GetBlockBlobReference("belgium.jpg");
 
 			imageBlob.Properties.ContentType = "image/jpeg";
@@ -28,7 +21,9 @@ namespace Demo {
 			imageInAFolderPageBlob.UploadFromByteArray(imageByteArray, 0, imageByteArray.Length);
 		}
 
-
+		/// <summary>
+		/// Creates and returns the reference to the blob container to store images in
+		/// </summary>
 		private static CloudBlobContainer GetContainerReference(string containerName) {
 			var blobClient = AzureHelper.CloudStorageAccount.CreateCloudBlobClient();
 			var container = blobClient.GetContainerReference(containerName);
