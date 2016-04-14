@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.Data.Entity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using GlobalAzureBootcampReport.Models;
 using GlobalAzureBootcampReport.Services;
 using Tweetinvi;
 using GlobalAzureBootcampReport.Data;
@@ -39,16 +36,6 @@ namespace GlobalAzureBootcampReport {
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			// Add framework services.
-			services.AddEntityFramework()
-				.AddSqlServer()
-				.AddDbContext<ApplicationDbContext>(options =>
-					options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
-
-			services.AddIdentity<ApplicationUser, IdentityRole>()
-				.AddEntityFrameworkStores<ApplicationDbContext>()
-				.AddDefaultTokenProviders();
-
 			services.AddMvc();
 			services.AddSignalR();
 
@@ -77,27 +64,10 @@ namespace GlobalAzureBootcampReport {
 				app.UseDatabaseErrorPage();
 				app.UseWebpack("webpack.config.js", "bundle.js", new WebpackDevServerOptions {Host= "localhost", Port = 4000 });
 			}
-			//else
-			//{
-			//    app.UseExceptionHandler("/Home/Error");
-			//}
-			// For more details on creating database during deployment see http://go.microsoft.com/fwlink/?LinkID=615859
-			try {
-				using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
-					.CreateScope()) {
-					serviceScope.ServiceProvider.GetService<ApplicationDbContext>()
-						 .Database.Migrate();
-				}
-			}
-			catch { }
 
 			app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());
 
 			app.UseStaticFiles();
-
-			app.UseIdentity();
-
-			// To configure external authentication please see http://go.microsoft.com/fwlink/?LinkID=532715
 
 			app.UseMvc(routes =>
 			{
