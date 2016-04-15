@@ -14,8 +14,6 @@ namespace GlobalAzureBootcampReport.Data.Impl {
 	internal class TwitterManager : ITwitterManager {
 
 		private const int BatchSize = 5;
-		private DateTime BeginningOfTimeLine = new DateTime(2016, 04, 14, 0, 0, 1, DateTimeKind.Utc);
-		private DateTime EndOfTimeLine = new DateTime(2016, 04, 14, 23, 59, 59, DateTimeKind.Utc);
 		private int _topUsersCounter;
 		private readonly List<Tweet> _tweetsCache = new List<Tweet>();
 
@@ -42,13 +40,10 @@ namespace GlobalAzureBootcampReport.Data.Impl {
 
 				_stream.MatchingTweetReceived += async (sender, args) => {
 					Debug.WriteLine(args.Tweet.Text);
-					var tweetUTCTime = args.Tweet.CreatedAt.ToUniversalTime();
-					if (tweetUTCTime > BeginningOfTimeLine && tweetUTCTime < EndOfTimeLine) {
-						var customTweet = args.Tweet.ToCustomTweet();
-						await _tweetsRepository.SaveTweet(customTweet);
-						await UpdateStatisticsAndClients(customTweet);
-						UpdateTweetsAndClients(customTweet);
-					}
+					var customTweet = args.Tweet.ToCustomTweet();
+					await _tweetsRepository.SaveTweet(customTweet);
+					await UpdateStatisticsAndClients(customTweet);
+					UpdateTweetsAndClients(customTweet);
 				};
 				_stream.StreamStopped += (sender, args) => Task.Factory.StartNew(_stream.StartStreamMatchingAllConditionsAsync);
 
