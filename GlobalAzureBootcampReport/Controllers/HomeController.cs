@@ -6,19 +6,19 @@ using Tweetinvi;
 using GlobalAzureBootcampReport.Data;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Infrastructure;
+using Microsoft.Extensions.Configuration;
 
 namespace GlobalAzureBootcampReport.Controllers {
 	public class HomeController : Controller
 	{
-		private ITwitterManager _twitterManager;
-		private ITweetsRepository _repo;
+		private readonly ITwitterManager _twitterManager;
+		private readonly ITweetsRepository _repo;
+		private readonly string _twitterConnectionKey;
 
-		private IHubContext _hubContext;
-
-		public HomeController(ITwitterManager twitterManager, ITweetsRepository repo, IConnectionManager connectionManager) {
+		public HomeController(ITwitterManager twitterManager, ITweetsRepository repo, IConnectionManager connectionManager, IConfiguration configuration) {
 			_twitterManager = twitterManager;
 			_repo = repo;
-			_hubContext = connectionManager.GetHubContext<BootcampReportHub>();
+			_twitterConnectionKey = configuration["TwitterConnectionKey"];
 		}
 
 		public IActionResult Index()
@@ -31,7 +31,6 @@ namespace GlobalAzureBootcampReport.Controllers {
 			ViewData["Message"] = "Your application description page.";
 			var latestTweetsCount = (await _repo.GetLatestTweets()).Count();
 			ViewBag.Count = latestTweetsCount;
-			_hubContext.Clients.All.updateUsersStats("Message from server");
 			return View();
 		}
 
@@ -49,7 +48,10 @@ namespace GlobalAzureBootcampReport.Controllers {
 			return View();
 		}
 
-		public ContentResult Connect() {
+		public IActionResult Connect(string id) {
+			if(id != _twitterConnectionKey) {
+				return new HttpNotFoundResult();
+			}
 			try {
 				_twitterManager.Connect();
 				return new ContentResult {
@@ -63,7 +65,10 @@ namespace GlobalAzureBootcampReport.Controllers {
 			}
 		}
 
-		public ContentResult Disconnect() {
+		public IActionResult Disconnect(string id) {
+			if (id != _twitterConnectionKey) {
+				return new HttpNotFoundResult();
+			}
 			try {
 				_twitterManager.Pause();
 				return new ContentResult {
@@ -77,7 +82,10 @@ namespace GlobalAzureBootcampReport.Controllers {
 			}
 		}
 
-		public ContentResult Reconnect() {
+		public IActionResult Reconnect(string id) {
+			if (id != _twitterConnectionKey) {
+				return new HttpNotFoundResult();
+			}
 			try {
 				_twitterManager.Resume();
 				return new ContentResult {
