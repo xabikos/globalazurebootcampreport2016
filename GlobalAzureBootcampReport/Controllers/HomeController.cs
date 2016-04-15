@@ -4,8 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using Tweetinvi;
 using GlobalAzureBootcampReport.Data;
-using Microsoft.AspNet.SignalR;
-using Microsoft.AspNet.SignalR.Infrastructure;
 using Microsoft.Extensions.Configuration;
 
 namespace GlobalAzureBootcampReport.Controllers {
@@ -15,7 +13,7 @@ namespace GlobalAzureBootcampReport.Controllers {
 		private readonly ITweetsRepository _repo;
 		private readonly string _twitterConnectionKey;
 
-		public HomeController(ITwitterManager twitterManager, ITweetsRepository repo, IConnectionManager connectionManager, IConfiguration configuration) {
+		public HomeController(ITwitterManager twitterManager, ITweetsRepository repo, IConfiguration configuration) {
 			_twitterManager = twitterManager;
 			_repo = repo;
 			_twitterConnectionKey = configuration["TwitterConnectionKey"];

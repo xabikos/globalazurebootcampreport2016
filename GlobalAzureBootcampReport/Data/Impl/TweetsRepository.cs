@@ -8,6 +8,10 @@ using System.Collections.Generic;
 using GlobalAzureBootcampReport.Azure;
 
 namespace GlobalAzureBootcampReport.Data.Impl {
+
+	/// <summary>
+	/// Implementation of <see cref="ITweetsRepository"/>
+	/// </summary>
 	internal class TweetsRepository : ITweetsRepository {
 
 		private readonly IDocumentDbManager _documentDbManager;

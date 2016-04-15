@@ -2,8 +2,11 @@
 using Tweetinvi.Core.Interfaces;
 
 namespace GlobalAzureBootcampReport.Extensions {
-	public static class TweetExtensions
-	{
+	public static class TweetExtensions {
+
+		/// <summary>
+		/// Helper method transforming the supplied <paramref name="tweet"/> entity to the custom Tweet type
+		/// </summary>
 		public static Tweet ToCustomTweet(this ITweet tweet) {
 			var result = new Tweet {
 				Id = tweet.IdStr,
@@ -22,12 +25,6 @@ namespace GlobalAzureBootcampReport.Extensions {
 				},
 				Language = tweet.Language
 			};
-			if (tweet.Coordinates != null) {
-				result.Coordinates = new Coordinates {
-					Latitude = tweet.Coordinates.Latitude,
-					Longitude = tweet.Coordinates.Longitude
-				};
-			}
 			if(tweet.Place != null) {
 				result.Place = new Place {
 					Name = tweet.Place.Name,

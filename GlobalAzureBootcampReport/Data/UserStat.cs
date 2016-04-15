@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 
 namespace GlobalAzureBootcampReport.Data {
+
+	/// <summary>
+	/// Class used to store the User Statistics in Redis Cache
+	/// </summary>
 	public class UserStat {
 		[JsonProperty("userId")]
 		public string UserId { get; set; }

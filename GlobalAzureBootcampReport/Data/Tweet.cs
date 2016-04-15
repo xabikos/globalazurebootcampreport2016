@@ -3,6 +3,10 @@ using System;
 using Tweetinvi.Core.Enum;
 
 namespace GlobalAzureBootcampReport.Data {
+
+	/// <summary>
+	/// Representing a tweet. This is also the POCO that is stored in the document DB
+	/// </summary>
 	public class Tweet {
 
 		/// <summary>
@@ -22,12 +26,6 @@ namespace GlobalAzureBootcampReport.Data {
 		/// </summary>
 		[JsonProperty("text")]
 		public string Text { get; set; }
-
-		/// <summary>
-		/// Coordinates of the location from where the tweet has been sent
-		/// </summary>
-		[JsonProperty("coordinates")]
-		public Coordinates Coordinates { get; set; }
 
 		/// <summary>
 		/// User who created the Tweet
@@ -81,20 +79,6 @@ namespace GlobalAzureBootcampReport.Data {
 
 		[JsonProperty("countryCode")]
 		public string CountryCode { get; set; }
-	}
-
-	public class Coordinates {
-		/// <summary>
-		/// Longitude of the coordinate (X).
-		/// </summary>
-		[JsonProperty("longitude")]
-		public double Longitude { get; set; }
-
-		/// <summary>
-		/// Lattitude of the coordinate (Y).
-		/// </summary>
-		[JsonProperty("latitude")]
-		public double Latitude { get; set; }
 	}
 
 	public class User {

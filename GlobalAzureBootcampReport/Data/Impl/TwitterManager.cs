@@ -8,9 +8,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Tweetinvi;
 using Tweetinvi.Core.Interfaces.Streaminvi;
-using System;
 
 namespace GlobalAzureBootcampReport.Data.Impl {
+	/// <summary>
+	/// Implmentation of <see cref="ITwitterManager"/>
+	/// </summary>
 	internal class TwitterManager : ITwitterManager {
 
 		private const int BatchSize = 5;
@@ -36,7 +38,7 @@ namespace GlobalAzureBootcampReport.Data.Impl {
 			if (_stream == null || _stream.StreamState == Tweetinvi.Core.Enum.StreamState.Stop || _stream.StreamState == Tweetinvi.Core.Enum.StreamState.Pause) {
 
 				_stream = Stream.CreateFilteredStream();
-				_stream.AddTrack("#6YearsSinceNiallsAudition");
+				_stream.AddTrack("#GlobalAzure");
 
 				_stream.MatchingTweetReceived += async (sender, args) => {
 					Debug.WriteLine(args.Tweet.Text);

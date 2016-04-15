@@ -1,11 +1,10 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace GlobalAzureBootcampReport.Data
-{
+namespace GlobalAzureBootcampReport.Data {
+
+	/// <summary>
+	/// The Tweet type that is used to stored in Azure Table storage
+	/// </summary>
 	public class TweetEntity : TableEntity {
 		public TweetEntity() { }
 

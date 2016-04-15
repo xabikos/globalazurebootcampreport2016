@@ -3,7 +3,6 @@ using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using GlobalAzureBootcampReport.Services;
 using Tweetinvi;
 using GlobalAzureBootcampReport.Data;
 using GlobalAzureBootcampReport.Data.Impl;
@@ -44,8 +43,6 @@ namespace GlobalAzureBootcampReport {
 			services.AddSingleton<IConfiguration>(sp => { return Configuration; });
 
 			// Add application services.
-			services.AddTransient<IEmailSender, AuthMessageSender>();
-			services.AddTransient<ISmsSender, AuthMessageSender>();
 			services.AddSingleton<AzureHelper>();
 			services.AddSingleton<ITwitterManager, TwitterManager>();
 			services.AddTransient<ICache, Cache>();

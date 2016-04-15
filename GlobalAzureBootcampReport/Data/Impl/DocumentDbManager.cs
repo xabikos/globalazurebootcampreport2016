@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 
 namespace GlobalAzureBootcampReport.Data.Impl {
+	/// <summary>
+	/// Implementation of <see cref="IDocumentDbManager"/>
+	/// </summary>
 	internal class DocumentDbManager : IDocumentDbManager {
 		private const string databaseName = "tweets";
 		private const string collectionName = "userstweets";

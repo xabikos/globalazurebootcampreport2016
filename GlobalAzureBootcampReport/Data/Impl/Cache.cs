@@ -2,14 +2,13 @@
 using Newtonsoft.Json;
 using StackExchange.Redis;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
-namespace GlobalAzureBootcampReport.Data.Impl
-{
-	internal class Cache : ICache
-	{
+namespace GlobalAzureBootcampReport.Data.Impl {
+	/// <summary>
+	/// Implementation of <see cref="ICache"/>
+	/// </summary>
+	internal class Cache : ICache {
 		private static string RedisConnectionString;
 		private static readonly Lazy<ConnectionMultiplexer> Connection = new Lazy<ConnectionMultiplexer>(() =>
 			ConnectionMultiplexer.Connect(RedisConnectionString));

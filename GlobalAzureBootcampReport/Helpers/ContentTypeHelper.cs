@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
-namespace GlobalAzureBootcampReport.Helpers
-{
-	public class ContentTypeHelper
-	{
+namespace GlobalAzureBootcampReport.Helpers {
+	public class ContentTypeHelper {
+		/// <summary>
+		/// Helper method that returns the correct content type for the supplied <paramref name="filename"/>
+		/// </summary>
 		public static string GetContentType(string filename) {
 			if (!filename.Contains(".")) {
 				return "application/octet-stream";

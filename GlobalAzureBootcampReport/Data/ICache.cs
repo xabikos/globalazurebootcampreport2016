@@ -1,13 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-namespace GlobalAzureBootcampReport.Data
-{
-	public interface ICache
-	{
+namespace GlobalAzureBootcampReport.Data {
+	/// <summary>
+	/// Contract interface for accessing application's cache
+	/// </summary>
+	public interface ICache	{
+
+		/// <summary>
+		/// The key for the top users statistics entry
+		/// </summary>
 		string TopUsersStatsKey { get; }
+
+		/// <summary>
+		/// The key for all users statistics entry
+		/// </summary>
 		string AllUsersStatsKey { get; }
 
 		/// <summary>
