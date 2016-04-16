@@ -11,7 +11,7 @@ using Tweetinvi.Core.Interfaces.Streaminvi;
 
 namespace GlobalAzureBootcampReport.Data.Impl {
 	/// <summary>
-	/// Implmentation of <see cref="ITwitterManager"/>
+	/// Implementation of <see cref="ITwitterManager"/>
 	/// </summary>
 	internal class TwitterManager : ITwitterManager {
 
