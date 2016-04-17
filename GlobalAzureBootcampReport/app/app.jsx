@@ -1,5 +1,5 @@
 ﻿import React, {Component} from 'react';
-import {Grid, Row, Col} from 'react-bootstrap';
+import {Grid, Row, Col, Label} from 'react-bootstrap';
 
 import './style.css';
 
@@ -27,6 +27,11 @@ class App extends Component {
       <div>
         <NavigationBar />
         <Grid fluid={false} >
+          <Row>
+            <Col md={5} mdOffset={3}>
+              <div><h4>Total naumber of tweets with hashtag #GlobalAzure <Label bsStyle="info">8.345</Label></h4></div>
+            </Col>
+          </Row>
           <Row>
             <Col xs={12} md={3}>
               <UsersStatsList onViewUsersTweets={this.handleViewUserTweets}/>

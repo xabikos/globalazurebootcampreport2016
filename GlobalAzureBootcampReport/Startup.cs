@@ -82,7 +82,7 @@ namespace GlobalAzureBootcampReport {
 				Configuration["TwitterUserAccessToken"],
 				Configuration["TwitterUserAccessSecret"]
 			);
-			app.ApplicationServices.GetRequiredService<ITwitterManager>().Connect();
+			//app.ApplicationServices.GetRequiredService<ITwitterManager>().Connect();
 		}
 
 		// Entry point for the application.
