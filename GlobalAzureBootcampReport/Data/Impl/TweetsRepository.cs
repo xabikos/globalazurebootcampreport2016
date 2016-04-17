@@ -28,7 +28,9 @@ namespace GlobalAzureBootcampReport.Data.Impl {
 			var query =
 				new TableQuery<TweetEntity>().Where(TableQuery.GenerateFilterConditionForDate("Timestamp",
 					QueryComparisons.GreaterThan, durationToRetrieve)).Take(100);
-			return table.ExecuteQuery(query).Select(t => new Tweet {
+			var topTwoHundredTweets =
+				new TableQuery<TweetEntity>().Take(200);
+			return table.ExecuteQuery(topTwoHundredTweets).Select(t => new Tweet {
 				Id = t.RowKey,
 				CreatedBy = new User { IdStr = t.PartitionKey, Name = t.User, ScreenName = t.ScreenName},
 				CreatedAt = DateTime.Parse(t.CreatedAt),
